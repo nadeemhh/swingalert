@@ -52,7 +52,7 @@ const Pricesforstock = mongoose.model('Pricesforstock', {
 /////////////////////////////////////////////////
 
 let objectomail={};
-//setInterval(function () {
+setInterval(function () {
 
 console.log('#new app#')
 async function getRequest() {
@@ -214,7 +214,7 @@ break;}
  }
 }
 getRequest()
-//}, 300000);
+}, 300000);
 
 
 ////////////////////mail function/////////////
