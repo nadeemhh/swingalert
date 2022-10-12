@@ -140,7 +140,7 @@ persentage=parseFloat(persentagecon.toFixed(2));
 
   swing_end=array_of_price[ii];
 
-if(persentage >= 10 && swing_end > array_of_price[ii+1]){
+if(persentage >= 0.3 && swing_end > array_of_price[ii+1]){
   
   
   if(getout == 0){
