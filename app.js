@@ -65,7 +65,7 @@ async function getRequest() {
 
   let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
 
-  if(parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
+  if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
     console.log('opdate',date)
   let all_script = await Pricesforstock.find({}).exec();
 
@@ -224,14 +224,14 @@ function mailfunction() {
           var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'flow669900@gmail.com',
-              pass: 'zlgsquqhhizxyngy'
+              user: 'foranyuse2221@gmail.com',
+              pass: 'lphzxvhzkhnolfsg'
             }
           });
           
           var mailOptions = {
-            from: 'flow669900@gmail.com',
-            to: 'flow669900@gmail.com',
+            from: 'foranyuse2221@gmail.com',
+            to: 'foranyuse2221@gmail.com',
             subject: 'swing alert for stock',
             html: `<p>scriptname = ${objectomail.scriptname}</p><p>swing_start = ${objectomail.swing_start} - ${objectomail.ssrtd}</p><p>swing_end = ${objectomail.swing_end} - ${objectomail.sendd}</p><p>retracement = ${objectomail.retracement} - ${objectomail.retraced}</p>`
           };

@@ -12,16 +12,16 @@ let obj={car:'hii'}
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'flow669900@gmail.com',
-      pass: 'zlgsquqhhizxyngy'
+      user: 'foranyuse2221@gmail.com',
+      pass: 'lphzxvhzkhnolfsg'
     }
   });
   
   var mailOptions = {
-    from: 'flow669900@gmail.com',
-    to: 'flow669900@gmail.com',
+    from: 'foranyuse2221@gmail.com',
+    to: 'foranyuse2221@gmail.com',
     subject: 'pivot point alert',
-    html: `${JSON.stringify(obj)}`
+    html: `new rgmail`
   };
   
 
