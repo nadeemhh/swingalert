@@ -232,7 +232,7 @@ function mailfunction() {
           var mailOptions = {
             from: 'flow669900@gmail.com',
             to: 'flow669900@gmail.com',
-            subject: 'pivot point alert',
+            subject: 'swing alert for stock',
             html: `<p>scriptname = ${objectomail.scriptname}</p><p>swing_start = ${objectomail.swing_start} - ${objectomail.ssrtd}</p><p>swing_end = ${objectomail.swing_end} - ${objectomail.sendd}</p><p>retracement = ${objectomail.retracement} - ${objectomail.retraced}</p>`
           };
           
