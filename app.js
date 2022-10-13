@@ -166,7 +166,7 @@ if(swing_end >= array_of_price[iii]){
     console.log('low',swing_start,swing_end,array_of_price[iii])
     getout2++;
     ////maling///
-     objectomail={scriptname:nameofscript,swing_start:swing_start,swing_end:swing_end,retracement:array_of_price[iii]}
+     objectomail={scriptname:nameofscript,swing_start:swing_start,swing_end:swing_end,retracement:array_of_price[iii],ssrtd:array_of_dates[array_of_price.indexOf(swing_start)].split(',')[1],sendd:array_of_dates[array_of_price.indexOf(swing_end)].split(',')[1],retraced:array_of_dates[iii].split(',')[1]}
      mailfunction()
     }
     
@@ -233,7 +233,7 @@ function mailfunction() {
             from: 'flow669900@gmail.com',
             to: 'flow669900@gmail.com',
             subject: 'pivot point alert',
-            html: `${JSON.stringify(objectomail)}`
+            html: `<p>scriptname = ${objectomail.scriptname}</p><p>swing_start = ${objectomail.swing_start} - ${objectomail.ssrtd}</p><p>swing_end = ${objectomail.swing_end} - ${objectomail.sendd}</p><p>retracement = ${objectomail.retracement} - ${objectomail.retraced}</p>`
           };
           
     
