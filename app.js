@@ -59,13 +59,13 @@ async function getRequest() {
  try {
   //////////////try start//////////////
 
-  let date = new Date().toLocaleString('en-IN');
+  let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
   console.log('cldate',date)
   let checkdate= date.split(',')[1].replaceAll(' ','')[1] == ':'?date.split(',')[1].replaceAll(' ','')[0]:date.split(',')[1].replaceAll(' ','')[0]+date.split(',')[1].replaceAll(' ','')[1];
 
   let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
 
-  if(parseFloat(checkdate) >= 9 && ampm == 'am' || parseFloat(checkdate) <= 4 && ampm == 'pm' || parseFloat(checkdate) == 12 && ampm == 'pm'){
+  if(parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
     console.log('opdate',date)
   let all_script = await Pricesforstock.find({}).exec();
 
