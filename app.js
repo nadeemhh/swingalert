@@ -140,7 +140,7 @@ persentage=parseFloat(persentagecon.toFixed(2));
 
   swing_end=array_of_price[ii];
 
-if(persentage >= 0.3 && swing_end > array_of_price[ii+1]){
+if(persentage >= 0.4 && swing_end > array_of_price[ii+1]){
   
   
   if(getout == 0){
@@ -233,7 +233,7 @@ function mailfunction() {
             from: 'flow669900@gmail.com',
             to: 'flow669900@gmail.com',
             subject: 'pivot point alert',
-            html: `${objectomail}`
+            html: `${JSON.stringify(objectomail)}`
           };
           
     
