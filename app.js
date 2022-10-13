@@ -50,7 +50,7 @@ const Pricesforstock = mongoose.model('Pricesforstock', {
 
 
 /////////////////////////////////////////////////
-
+let checksametypeofhighswing=[];
 let objectomail={};
 setInterval(function () {
 
@@ -109,7 +109,7 @@ let swing_start;
 let swing_end;
 let getout=0;
 let getout2=0;
-let checksametypeofhighswing=[];
+
 
 for(let i=0; i<array_of_price.length; i++){
   let persentage=0;
@@ -251,7 +251,7 @@ function mailfunction() {
                    
 
  app.get('/clearprice', async (req, res) => {
-
+  checksametypeofhighswing=[]
    let all_script = await Pricesforstock.find({}).exec();
 
    for(let i=0; i<all_script.length; i++){
