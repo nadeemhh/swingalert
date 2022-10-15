@@ -8,7 +8,7 @@ let checkdate= date.split(',')[1].replaceAll(' ','')[1] == ':'?date.split(',')[1
 let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
 console.log('da',checkdate,ampm)
 
-let obj={car:'hii'}
+
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

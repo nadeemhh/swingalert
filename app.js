@@ -49,8 +49,18 @@ const Pricesforstock = mongoose.model('Pricesforstock', {
   })
 
 
+  const Dublicateswing = mongoose.model('Dublicateswing', {
+    swings : {
+      type: Number
+         
+      },
+     
+       
+    })
+   
+
 /////////////////////////////////////////////////
-let checksametypeofhighswing=[];
+let deletalert={count:0}
 let objectomail={};
 setInterval(function () {
 
@@ -68,7 +78,7 @@ async function getRequest() {
   if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
     console.log('opdate',date)
   let all_script = await Pricesforstock.find({}).exec();
-
+  deletalert.count=0;
  
 //////////////getting price of stock//////////////
 
@@ -81,6 +91,7 @@ let nameofscript=all_script[i].scriptName;
   const dom = new JSDOM(response.data)
   console.log(dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',',''))
   let priceofstock=dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',','');
+  date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
   //////////////saving price of stock //////////////
 
  Pricesforstock.findOneAndUpdate({scriptName:all_script[i].scriptName}, {$push: {scriptprice: {price:priceofstock,	
@@ -109,7 +120,7 @@ let swing_start;
 let swing_end;
 let getout=0;
 let getout2=0;
-
+let checksametypeofhighswing=[];
 
 for(let i=0; i<array_of_price.length; i++){
   let persentage=0;
@@ -144,6 +155,12 @@ if(persentage >= 0.4 && swing_end > array_of_price[ii+1]){
   
   
   if(getout == 0){
+
+    let checkalerts = await Dublicateswing.find({}).exec();
+    for(let j =0; j<checkalerts.length; j++){
+      checksametypeofhighswing.push(checkalerts[j].swings)
+   }
+
 if(checksametypeofhighswing.includes(swing_end)  == false){
 
   //console.log('high',swing_start,swing_end,persentage)
@@ -167,6 +184,13 @@ if(swing_end >= array_of_price[iii]){
     getout2++;
     ////maling///
      objectomail={scriptname:nameofscript,swing_start:swing_start,swing_end:swing_end,retracement:array_of_price[iii],ssrtd:array_of_dates[array_of_price.indexOf(swing_start)].split(',')[1],sendd:array_of_dates[array_of_price.indexOf(swing_end)].split(',')[1],retraced:array_of_dates[iii].split(',')[1]}
+
+     const Dublicateswings = new Dublicateswing({
+      swings:swing_end,
+   
+   })
+   Dublicateswings.save() 
+
      mailfunction()
     }
     
@@ -208,7 +232,13 @@ break;}
 
 //////////////getting price of stock end//////////////
  }
- else{console.log('market is close')}
+ else{
+  console.log('market is close')
+  if(deletalert.count == 0){
+  await Dublicateswing.deleteMany({})
+  deletalert.count++;
+}
+}
 //////////////try end//////////////
  } catch (err) {
      console.log(err)
