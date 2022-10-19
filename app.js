@@ -243,7 +243,7 @@ async function getRequest() {
  }
 
 setInterval(function () {
-  console.log('#new app#')
+
  let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
 console.log('ch',date.split(',')[1])
 
@@ -251,7 +251,7 @@ let minutes=date.split(',')[1].replaceAll(' ','')[0] <10 ?date.split(',')[1].rep
 
 let seconds=date.split(',')[1].replaceAll(' ','')[0] <10 ? date.split(',')[1].replaceAll(' ','').slice(5,7):date.split(',')[1].replaceAll(' ','').slice(6,8);
 
-  if(parseFloat(minutes)==04 && parseFloat(seconds)==50 || parseFloat(minutes)==9 && parseFloat(seconds)==50 ||parseFloat(minutes)==14 && parseFloat(seconds)==50 || parseFloat(minutes)==19 && parseFloat(seconds)==50 || parseFloat(minutes)==24 && parseFloat(seconds)==50 ||parseFloat(minutes)==29 && parseFloat(seconds)==50 || parseFloat(minutes)==34 && parseFloat(seconds)==50 ||parseFloat(minutes)==39 && parseFloat(seconds)==50 || parseFloat(minutes)==44 && parseFloat(seconds)==50 ||parseFloat(minutes)==49 && parseFloat(seconds)==50 || parseFloat(minutes)==54 && parseFloat(seconds)==50 ||parseFloat(minutes)==59 && parseFloat(seconds)==50){
+  if(parseFloat(minutes)==04 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==9 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 ||parseFloat(minutes)==14 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==19 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==24 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 ||parseFloat(minutes)==29 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==34 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 ||parseFloat(minutes)==39 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==44 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 ||parseFloat(minutes)==49 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 || parseFloat(minutes)==54 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55 ||parseFloat(minutes)==59 && parseFloat(seconds) > 50 && parseFloat(seconds) < 55){
 
     console.log('yes',minutes,seconds)
     getRequest()
