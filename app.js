@@ -62,190 +62,207 @@ const Pricesforstock = mongoose.model('Pricesforstock', {
 /////////////////////////////////////////////////
 let deletalert={count:0}
 let objectomail={};
-setInterval(function () {
 
-console.log('#new app#')
 async function getRequest() {
- try {
-  //////////////try start//////////////
-
-  let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
-  console.log('cldate',date)
-  let checkdate= date.split(',')[1].replaceAll(' ','')[1] == ':'?date.split(',')[1].replaceAll(' ','')[0]:date.split(',')[1].replaceAll(' ','')[0]+date.split(',')[1].replaceAll(' ','')[1];
-
-  let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
-
-  if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
-    console.log('opdate',date)
-  let all_script = await Pricesforstock.find({}).exec();
-  deletalert.count=0;
+  try {
+   //////////////try start//////////////
  
-//////////////getting price of stock//////////////
-
-  for(let i=0; i<all_script.length; i++){
-   
-    console.log('da',date)
-  const response = await axios.get(`https://in.investing.com/equities/${all_script[i].scriptName}`);
+   console.log('###checking started###')
+   let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+   console.log('cldate',date)
+   let checkdate= date.split(',')[1].replaceAll(' ','')[1] == ':'?date.split(',')[1].replaceAll(' ','')[0]:date.split(',')[1].replaceAll(' ','')[0]+date.split(',')[1].replaceAll(' ','')[1];
+ 
+   let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
+ 
+   if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
+     console.log('opdate',date)
+   let all_script = await Pricesforstock.find({}).exec();
+   deletalert.count=0;
   
-let nameofscript=all_script[i].scriptName;
-  const dom = new JSDOM(response.data)
-  console.log(dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',',''))
-  let priceofstock=dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',','');
-  date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
-  //////////////saving price of stock //////////////
-
- Pricesforstock.findOneAndUpdate({scriptName:all_script[i].scriptName}, {$push: {scriptprice: {price:priceofstock,	
-  onetodelete:'1',date:date}}},
-    function (error, success) {
-          if (error) {
-              console.log(error);
-          } else {
-              console.log('pushed in scriptprice');
-           
-          }
-      });
-
-
-      let price = await Pricesforstock.find({scriptName:all_script[i].scriptName}).exec();
-      let array_of_price=[];
-      let array_of_dates=[];
-      for(let f = 0; f < price[0].scriptprice.length; f++){
-        array_of_price.push(parseFloat(price[0].scriptprice[f].price))
-        array_of_dates.push(price[0].scriptprice[f].date)
-      }
-      console.log(array_of_price,array_of_dates)
-
-      
-let swing_start;
-let swing_end;
-let getout=0;
-let getout2=0;
-let checksametypeofhighswing=[];
-
-for(let i=0; i<array_of_price.length; i++){
-  let persentage=0;
-  let persentagecon=0;
-  let margin={margin:0};
-let lowmargin={lowmargin:0};
-  getout=0;
-  getout2=0;
-  swing_start=array_of_price[i];
-
-  if(i!=array_of_price.length-1){
-
-
-   // swing up check
-  // check  if swing_start is less than coming price
-  if(swing_start <= array_of_price[i+1] && swing_start < array_of_price[i-1] && swing_start < array_of_price[i-2]){
-    //console.log('ss',swing_start,array_of_dates[array_of_price.indexOf(swing_start)])
-    let inc = i+1;
-for(let ii=inc; ii<array_of_price.length; ii++){
-
-  // check  if swing_start is less than coming price
-if(swing_start <= array_of_price[ii]){
-  
-  margin.margin=array_of_price[ii]-swing_start;
-
-  persentagecon=margin.margin/swing_start*100;
-persentage=parseFloat(persentagecon.toFixed(2));
-
-  swing_end=array_of_price[ii];
-
-if(persentage >= 0.4 && swing_end > array_of_price[ii+1]){
-  
-  
-  if(getout == 0){
-
-    let checkalerts = await Dublicateswing.find({}).exec();
-    for(let j =0; j<checkalerts.length; j++){
-      checksametypeofhighswing.push(checkalerts[j].swings)
-   }
-
-if(checksametypeofhighswing.includes(swing_end)  == false){
-
-  //console.log('high',swing_start,swing_end,persentage)
-  checksametypeofhighswing.push(swing_end)
-  //console.log(persentage ,'>=', 9, '&&', swing_end, '>', array_of_price[ii+1])
-  getout++;
-  let inc2 = ii+1;
-  /////// low check
-  
-  for(let iii=inc2; iii<array_of_price.length; iii++){
-   
-    if(swing_start < array_of_price[iii]){
-      
-if(swing_end >= array_of_price[iii]){
-  lowmargin.lowmargin=swing_end-array_of_price[iii];
-
-  if(lowmargin.lowmargin >= (swing_end-swing_start)/10*5){
-   
-    if(getout2 == 0){
-    console.log('low',swing_start,swing_end,array_of_price[iii])
-    getout2++;
-    ////maling///
-     objectomail={scriptname:nameofscript,swing_start:swing_start,swing_end:swing_end,retracement:array_of_price[iii],ssrtd:array_of_dates[array_of_price.indexOf(swing_start)].split(',')[1],sendd:array_of_dates[array_of_price.indexOf(swing_end)].split(',')[1],retraced:array_of_dates[iii].split(',')[1]}
-
-     const Dublicateswings = new Dublicateswing({
-      swings:swing_end,
-   
-   })
-   Dublicateswings.save() 
-
-     mailfunction()
-    }
+ //////////////getting price of stock//////////////
+ 
+   for(let i=0; i<all_script.length; i++){
     
-  }
-}
-
-else{
-  margin.margin=array_of_price[iii]-swing_start;
-  swing_end=array_of_price[iii];
-}
+     console.log('da',date)
+   const response = await axios.get(`https://in.investing.com/equities/${all_script[i].scriptName}`);
+   
+ let nameofscript=all_script[i].scriptName;
+   const dom = new JSDOM(response.data)
+   console.log(dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',',''))
+   let priceofstock=dom.window.document.querySelectorAll('.js-streamable-element')[0].textContent.replace(',','');
+   date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+   //////////////saving price of stock //////////////
+ 
+  Pricesforstock.findOneAndUpdate({scriptName:all_script[i].scriptName}, {$push: {scriptprice: {price:priceofstock,	
+   onetodelete:'1',date:date}}},
+     function (error, success) {
+           if (error) {
+               console.log(error);
+           } else {
+               console.log('pushed in scriptprice');
+            
+           }
+       });
+ 
+ 
+       let price = await Pricesforstock.find({scriptName:all_script[i].scriptName}).exec();
+       let array_of_price=[];
+       let array_of_dates=[];
+       for(let f = 0; f < price[0].scriptprice.length; f++){
+         array_of_price.push(parseFloat(price[0].scriptprice[f].price))
+         array_of_dates.push(price[0].scriptprice[f].date)
+       }
+       console.log(array_of_price,array_of_dates)
+ 
+       
+ let swing_start;
+ let swing_end;
+ let getout=0;
+ let getout2=0;
+ let checksametypeofhighswing=[];
+ 
+ for(let i=0; i<array_of_price.length; i++){
+   let persentage=0;
+   let persentagecon=0;
+   let margin={margin:0};
+ let lowmargin={lowmargin:0};
+   getout=0;
+   getout2=0;
+   swing_start=array_of_price[i];
+ 
+   if(i!=array_of_price.length-1){
+ 
+ 
+    // swing up check
+   // check  if swing_start is less than coming price
+   if(swing_start <= array_of_price[i+1] && swing_start < array_of_price[i-1] && swing_start < array_of_price[i-2]){
+ 
+     let inc = i+1;
+ for(let ii=inc; ii<array_of_price.length; ii++){
+ 
+   // check  if swing_start is less than coming price
+ if(swing_start <= array_of_price[ii]){
+   
+   margin.margin=array_of_price[ii]-swing_start;
+ 
+   persentagecon=margin.margin/swing_start*100;
+ persentage=parseFloat(persentagecon.toFixed(2));
+ 
+   swing_end=array_of_price[ii];
+ 
+ if(persentage >= 0.4 && swing_end > array_of_price[ii+1]){
+   
+   
+   if(getout == 0){
+ 
+     let checkalerts = await Dublicateswing.find({}).exec();
+     for(let j =0; j<checkalerts.length; j++){
+       checksametypeofhighswing.push(checkalerts[j].swings)
     }
-
-    else{break;}
-  }
-///////////////
-  
-}
-else{break;}
-  }
-
-}
-
-}
-else{
-//console.log('yehi',swing_start,swing_end,margin.margin)
-console.log('at support')
-break;}
-}
-
-  }
-
-  }
-
-}
-
-//////////////saving price of stock end//////////////
-
+ 
+ if(checksametypeofhighswing.includes(swing_end)  == false){
+ 
+   getout++;
+   let inc2 = ii+1;
+   /////// low check
+   
+   for(let iii=inc2; iii<array_of_price.length; iii++){
+    
+     if(swing_start < array_of_price[iii]){
+       
+ if(swing_end >= array_of_price[iii]){
+   lowmargin.lowmargin=swing_end-array_of_price[iii];
+ 
+   if(lowmargin.lowmargin >= (swing_end-swing_start)/10*5){
+    
+     if(getout2 == 0){
+     console.log('low',swing_start,swing_end,array_of_price[iii])
+     getout2++;
+     ////maling///
+      objectomail={scriptname:nameofscript,swing_start:swing_start,swing_end:swing_end,retracement:array_of_price[iii],ssrtd:array_of_dates[array_of_price.indexOf(swing_start)].split(',')[1],sendd:array_of_dates[array_of_price.indexOf(swing_end)].split(',')[1],retraced:array_of_dates[iii].split(',')[1]}
+ 
+      const Dublicateswings = new Dublicateswing({
+       swings:swing_end,
+    
+    })
+    Dublicateswings.save() 
+ 
+      mailfunction()
+     }
+     
+   }
  }
-
-//////////////getting price of stock end//////////////
+ 
+ else{
+   margin.margin=array_of_price[iii]-swing_start;
+   swing_end=array_of_price[iii];
+ }
+     }
+ 
+     else{break;}
+   }
+ ///////////////
+   
+ }
+ else{break;}
+   }
+ 
+ }
+ 
  }
  else{
-  console.log('market is close')
-  if(deletalert.count == 0){
-  await Dublicateswing.deleteMany({})
-  deletalert.count++;
-}
-}
-//////////////try end//////////////
- } catch (err) {
-     console.log(err)
+ //console.log('yehi',swing_start,swing_end,margin.margin)
+ console.log('at support')
+ break;
  }
-}
-getRequest()
-}, 300000);
+ }
+ 
+   }
+ 
+   }
+ 
+ }
+ 
+ //////////////saving price of stock end//////////////
+ 
+  }
+ 
+ //////////////getting price of stock end//////////////
+  }
+  else{
+   console.log('market is close')
+   if(deletalert.count == 0){
+   await Dublicateswing.deleteMany({})
+   deletalert.count++;
+ }
+ }
+ //////////////try end//////////////
+  } catch (err) {
+      console.log(err)
+  }
+ }
+
+setInterval(function () {
+  console.log('#new app#')
+ let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+console.log('ch',date.split(',')[1])
+
+let minutes=date.split(',')[1].replaceAll(' ','')[0] <10 ?date.split(',')[1].replaceAll(' ','').slice(2,4):date.split(',')[1].replaceAll(' ','').slice(3,5);
+
+let seconds=date.split(',')[1].replaceAll(' ','')[0] <10 ? date.split(',')[1].replaceAll(' ','').slice(5,7):date.split(',')[1].replaceAll(' ','').slice(6,8);
+
+  if(parseFloat(minutes)==05 && parseFloat(seconds)==00 || parseFloat(minutes)==10 && parseFloat(seconds)==00 ||parseFloat(minutes)==15 && parseFloat(seconds)==00 || parseFloat(minutes)==20 && parseFloat(seconds)==00 || parseFloat(minutes)==25 && parseFloat(seconds)==00 ||parseFloat(minutes)==30 && parseFloat(seconds)==00 || parseFloat(minutes)==35 && parseFloat(seconds)==00 ||parseFloat(minutes)==40 && parseFloat(seconds)==00 || parseFloat(minutes)==45 && parseFloat(seconds)==00 ||parseFloat(minutes)==50 && parseFloat(seconds)==00 || parseFloat(minutes)==55 && parseFloat(seconds)==00 ||parseFloat(minutes)==60 && parseFloat(seconds)==00){
+
+    console.log('yes',minutes,seconds)
+    getRequest()
+
+  }
+
+  else{console.log('waiting for 5 min')}
+
+
+
+}, 1000);
 
 
 ////////////////////mail function/////////////

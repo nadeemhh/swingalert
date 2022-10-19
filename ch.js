@@ -1,34 +1,27 @@
-const { json } = require('body-parser');
-var nodemailer = require('nodemailer');
-let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
-console.log('da',date.split(',')[1][1])
 
+let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+console.log('da',date.split(',')[1])
+console.log('da',date.split(',')[1].replaceAll(' ','').slice(3,5))
+console.log('sec',date.split(',')[1].replaceAll(' ','').slice(6,8))
+let minutes=date.split(',')[1].replaceAll(' ','')[0] <10 ?date.split(',')[1].replaceAll(' ','').slice(2,4):date.split(',')[1].replaceAll(' ','').slice(3,5);
+let seconds=date.split(',')[1].replaceAll(' ','')[0] <10 ? date.split(',')[1].replaceAll(' ','').slice(5,7):date.split(',')[1].replaceAll(' ','').slice(6,8);
+console.log('yes',date.split(',')[1].replaceAll(' ',''),minutes,seconds)
+// setInterval(() => {
+
+
+//   let date = new Date().toLocaleString("en-Us", {timeZone: 'Asia/Kolkata'});
+// console.log('ch',date.split(',')[1])
+
+// let minutes=date.split(',')[1].replaceAll(' ','').slice(3,5);
+// let seconds=date.split(',')[1].replaceAll(' ','').slice(6,8);
+//   if(parseFloat(minutes)==04 && parseFloat(seconds)==00 || parseFloat(minutes)==57 && parseFloat(seconds)==00 ||parseFloat(minutes)==58 && parseFloat(seconds)==00){
+//     console.log('yes',minutes,seconds)
+//   }
+// }, 1000);
 
 let checkdate= date.split(',')[1].replaceAll(' ','')[1] == ':'?date.split(',')[1].replaceAll(' ','')[0]:date.split(',')[1].replaceAll(' ','')[0]+date.split(',')[1].replaceAll(' ','')[1];
+
 let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
-console.log('da',checkdate,ampm)
 
+console.log('da2',checkdate,ampm)
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'foranyuse2221@gmail.com',
-      pass: 'lphzxvhzkhnolfsg'
-    }
-  });
-  
-  var mailOptions = {
-    from: 'foranyuse2221@gmail.com',
-    to: 'foranyuse2221@gmail.com',
-    subject: 'pivot point alert',
-    html: `new rgmail`
-  };
-  
-
-transporter.sendMail(mailOptions, function(error, info){
-if (error) {
-console.log(error);
-} else {
-console.log('Email sent: ' + info.response);
-}
-});
