@@ -251,7 +251,7 @@ let minutes=date.split(',')[1].replaceAll(' ','')[0] <10 ?date.split(',')[1].rep
 
 let seconds=date.split(',')[1].replaceAll(' ','')[0] <10 ? date.split(',')[1].replaceAll(' ','').slice(5,7):date.split(',')[1].replaceAll(' ','').slice(6,8);
 
-  if(parseFloat(minutes)==05 && parseFloat(seconds)==00 || parseFloat(minutes)==10 && parseFloat(seconds)==00 ||parseFloat(minutes)==15 && parseFloat(seconds)==00 || parseFloat(minutes)==20 && parseFloat(seconds)==00 || parseFloat(minutes)==25 && parseFloat(seconds)==00 ||parseFloat(minutes)==30 && parseFloat(seconds)==00 || parseFloat(minutes)==35 && parseFloat(seconds)==00 ||parseFloat(minutes)==40 && parseFloat(seconds)==00 || parseFloat(minutes)==45 && parseFloat(seconds)==00 ||parseFloat(minutes)==50 && parseFloat(seconds)==00 || parseFloat(minutes)==55 && parseFloat(seconds)==00 ||parseFloat(minutes)==60 && parseFloat(seconds)==00){
+  if(parseFloat(minutes)==04 && parseFloat(seconds)==50 || parseFloat(minutes)==9 && parseFloat(seconds)==50 ||parseFloat(minutes)==14 && parseFloat(seconds)==50 || parseFloat(minutes)==19 && parseFloat(seconds)==50 || parseFloat(minutes)==24 && parseFloat(seconds)==50 ||parseFloat(minutes)==29 && parseFloat(seconds)==50 || parseFloat(minutes)==34 && parseFloat(seconds)==50 ||parseFloat(minutes)==39 && parseFloat(seconds)==50 || parseFloat(minutes)==44 && parseFloat(seconds)==50 ||parseFloat(minutes)==49 && parseFloat(seconds)==50 || parseFloat(minutes)==54 && parseFloat(seconds)==50 ||parseFloat(minutes)==59 && parseFloat(seconds)==50){
 
     console.log('yes',minutes,seconds)
     getRequest()
