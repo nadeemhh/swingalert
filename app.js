@@ -22,7 +22,7 @@ const port = process.env.PORT || 3600
 
 mongoose.connect('mongodb+srv://virtual-trading:hkiyygh68tfgcfhs586@cluster0.ohx5a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 
-//mongoose.connect('mongodb+srv://pivotpoint:767967574@cluster0.fw3uvzc.mongodb.net/?retryWrites=true&w=majority')
+
 
 const Pricesforstock = mongoose.model('Pricesforstock', {
   scriptName : {
@@ -122,10 +122,10 @@ async function getRequest() {
  let checksametypeofhighswing=[];
  
  for(let i=0; i<array_of_price.length; i++){
-   let persentage=0;
-   let persentagecon=0;
-   let margin={margin:0};
- let lowmargin={lowmargin:0};
+let persentage=0;
+let persentagecon=0;
+let margin={margin:0};
+let lowmargin={lowmargin:0};
    getout=0;
    getout2=0;
    swing_start=array_of_price[i];
@@ -135,16 +135,16 @@ async function getRequest() {
  
     // swing up check
    // check  if swing_start is less than coming price
-   if(swing_start <= array_of_price[i+1] && swing_start < array_of_price[i-1] && swing_start < array_of_price[i-2]){
+   if(swing_start < array_of_price[i+1] && swing_start < array_of_price[i-1] && swing_start < array_of_price[i-2]){
  
      let inc = i+1;
  for(let ii=inc; ii<array_of_price.length; ii++){
  
    // check  if swing_start is less than coming price
- if(swing_start <= array_of_price[ii]){
+ if(swing_start < array_of_price[ii]){
    
    margin.margin=array_of_price[ii]-swing_start;
- 
+  
    persentagecon=margin.margin/swing_start*100;
  persentage=parseFloat(persentagecon.toFixed(2));
  
@@ -318,6 +318,9 @@ function mailfunction() {
    }
 
  })
+
+
+
 
 app.listen(port)
 
