@@ -176,6 +176,10 @@ let lowmargin={lowmargin:0};
    if(lowmargin.lowmargin >= (swing_end-swing_start)/10*5){
     
      if(getout2 == 0){
+
+      if(checksametypeofhighswing.includes(swing_end)  == false){
+        checksametypeofhighswing.push(swing_end)
+
      console.log('low',swing_start,swing_end,array_of_price[iii])
      getout2++;
      ////maling///
@@ -188,6 +192,8 @@ let lowmargin={lowmargin:0};
     Dublicateswings.save() 
  
       mailfunction()
+
+  }
      }
      
    }
@@ -320,7 +326,7 @@ function mailfunction() {
  })
 
 
-
+//heroku logs --tail
 
 app.listen(port)
 
