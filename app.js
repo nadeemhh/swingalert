@@ -20,7 +20,7 @@ app.use(express.static(publicDirectoryPath))
 
 const port = process.env.PORT || 3600
 
-mongoose.connect('mongodb+srv://virtual-trading:hkiyygh68tfgcfhs586@cluster0.ohx5a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODBURL)
 
 
 
@@ -278,7 +278,7 @@ function mailfunction() {
             service: 'gmail',
             auth: {
               user: 'foranyuse2221@gmail.com',
-              pass: 'lphzxvhzkhnolfsg'
+              pass: process.env.EMAILPASS
             }
           });
           
