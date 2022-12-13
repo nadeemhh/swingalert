@@ -20,7 +20,7 @@ app.use(express.static(publicDirectoryPath))
 
 const port = process.env.PORT || 3600
 
-mongoose.connect(process.env.MONGODBURL)
+mongoose.connect('mongodb+srv://virtual-trading:hkiyygh68tfgcfhs586@cluster0.ohx5a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 
 
 
@@ -58,7 +58,8 @@ const Pricesforstock = mongoose.model('Pricesforstock', {
        
     })
    
-
+  
+   
 /////////////////////////////////////////////////
 let deletalert={count:0}
 let objectomail={};
@@ -74,7 +75,7 @@ async function getRequest() {
  
    let ampm=date.split(',')[1].replaceAll(' ','').slice(-2);
  
-   if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 4 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
+   if(parseFloat(checkdate) == 12 && ampm == 'AM'?false:parseFloat(checkdate) >= 9 && ampm == 'AM' || parseFloat(checkdate) <= 2 && ampm == 'PM' || parseFloat(checkdate) == 12 && ampm == 'PM'){
      console.log('opdate',date)
    let all_script = await Pricesforstock.find({}).exec();
    deletalert.count=0;
@@ -114,7 +115,11 @@ async function getRequest() {
        }
        console.log(array_of_price,array_of_dates)
  
-       
+       function lengthBetween(swing_start,swing_end) {
+        let lengthbetween = array_of_price.indexOf(swing_start)-array_of_price.indexOf(swing_end)
+      return Math.abs(lengthbetween);
+      }
+
  let swing_start;
  let swing_end;
  let getout=0;
@@ -165,7 +170,12 @@ let lowmargin={lowmargin:0};
    getout++;
    let inc2 = ii+1;
    /////// low check
-   
+   let length_Between= lengthBetween(swing_start,swing_end);
+console.log(length_Between)
+
+   if(length_Between >= 4){
+    console.log(swing_start,swing_end,length_Between , 4,'length_Between >= 4')
+
    for(let iii=inc2; iii<array_of_price.length; iii++){
     
      if(swing_start < array_of_price[iii]){
@@ -206,7 +216,8 @@ let lowmargin={lowmargin:0};
      }
  
      else{break;}
-   }
+   }}
+   else{console.log('#### swing is lower than 4 ####')}
  ///////////////
    
  }
@@ -240,6 +251,22 @@ let lowmargin={lowmargin:0};
    if(deletalert.count == 0){
    await Dublicateswing.deleteMany({})
    deletalert.count++;
+   checksametypeofhighswing=[]
+   let all_script = await Pricesforstock.find({}).exec();
+
+   for(let i=0; i<all_script.length; i++){
+
+    Pricesforstock.findOneAndUpdate({scriptName:all_script[i].scriptName}, {$pull: {scriptprice: {onetodelete:'1'}}},
+    function (error, success) {
+          if (error) {
+              console.log(error);
+          } else {
+              console.log('cleared price');
+           
+          }
+      });
+    
+   }
  }
  }
  //////////////try end//////////////
@@ -278,7 +305,7 @@ function mailfunction() {
             service: 'gmail',
             auth: {
               user: 'foranyuse2221@gmail.com',
-              pass: process.env.EMAILPASS
+              pass: 'lphzxvhzkhnolfsg'
             }
           });
           
