@@ -5,7 +5,7 @@ function lengthBetween(swing_start,swing_end) {
   let lengthbetween = arr.indexOf(swing_start)-arr.indexOf(swing_end)
 return Math.abs(lengthbetween);
 }
-let length_Between= lengthBetween(2,6);
+let length_Between= lengthBetween(12,14);
 console.log(length_Between)
 
 

@@ -173,8 +173,8 @@ let lowmargin={lowmargin:0};
    let length_Between= lengthBetween(swing_start,swing_end);
 console.log(length_Between)
 
-   if(length_Between >= 4){
-    console.log(swing_start,swing_end,length_Between , 4,'length_Between >= 4')
+   if(length_Between >= 6){
+    console.log(swing_start,swing_end,length_Between , 3,'length_Between >= 3')
 
    for(let iii=inc2; iii<array_of_price.length; iii++){
     
